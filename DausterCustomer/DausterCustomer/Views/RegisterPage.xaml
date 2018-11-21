@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DausterCustomer.Views.RegisterPage"
+             Title="Registro de usuarios">
+    <ContentPage.Content>
+        <ScrollView>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Image Source="{Binding imageSorceBackgrond}" Aspect="Fill" Grid.Row="0"/>
+
+                <StackLayout Grid.Row="0" Orientation="Vertical" Margin="30">
+                    <StackLayout Orientation="Vertical">
+                        <Picker BackgroundColor="White" ItemsSource="{Binding KindPersonPiker}" ItemDisplayBinding="{Binding name}" 
+                                Title="Tipo de persona" SelectedItem="{ Binding KindPersonSelect, Mode=TwoWay}">
+                        </Picker>
+                        <Label Text="{Binding kindPersonError, Mode=OneWay}" IsVisible="{Binding bKindPersonError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <Entry Text="{Binding oUser.name, Mode=TwoWay}" TextColor="Gray" Placeholder="Ingrese sus nombres" PlaceholderColor="Gray"
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White">
+                        </Entry>
+                        <Label Text="{Binding nameError, Mode=OneWay}" IsVisible="{Binding bNameError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <Entry Text="{Binding oUser.surnames, Mode=TwoWay}" TextColor="Gray" Placeholder="Ingrese sus apellidos" PlaceholderColor="Gray" 
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                        <Label Text="{Binding surnamesError, Mode=OneWay}" IsVisible="{Binding bSurnamesError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <DatePicker BackgroundColor="White" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}" 
+                                    Date="{Binding oUser.birthday, Mode=TwoWay}">
+                            <DatePicker.Format>dd-MM-yyyy</DatePicker.Format>
+                        </DatePicker>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <Entry Text="{Binding oUser.email, Mode=TwoWay}" TextColor="Gray" Placeholder="Ingrese su email" PlaceholderColor="Gray" 
+                               Keyboard="Email" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                        <Label Text="{Binding emailError, Mode=OneWay}" IsVisible="{Binding bEmailError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <Entry Text="{Binding oUser.phone, Mode=TwoWay}" TextColor="Gray" Placeholder="Ingrese su teléfono" PlaceholderColor="Gray" 
+                               Keyboard="Telephone" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White" MaxLength="10"/>
+                        <Label Text="{Binding phoneError, Mode=OneWay}" IsVisible="{Binding bPhoneError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <Entry Text="{Binding oUser.password, Mode=TwoWay}" TextColor="Gray" Placeholder="Ingrese su contraseña" PlaceholderColor="Gray" 
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White" IsPassword="True" />
+                        <Label Text="{Binding passwordError, Mode=OneWay}" IsVisible="{Binding bPasswordError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <Entry Text="{Binding oUser.password_confirmation, Mode=TwoWay}" TextColor="Gray" Placeholder="Confirme contraseña" PlaceholderColor="Gray" 
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White" IsPassword="True"/>
+                        <Label Text="{Binding passwordConfirmError, Mode=OneWay}" IsVisible="{Binding bPasswordConfirmError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Button Text="Registrar" BackgroundColor="#0072BD" TextColor="White" 
+                                    FontSize="18" Command="{Binding RegisterCommand}"/>
+                    </StackLayout>
+
+                </StackLayout>
+
+                <ActivityIndicator Color="#2E64FE" IsRunning="{Binding IsBusy }" Grid.Row="0"/>
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

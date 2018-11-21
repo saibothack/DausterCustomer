@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DausterCustomer.Views.LoginPage"
+             NavigationPage.HasNavigationBar="false">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Orientation="Vertical">
+                <StackLayout Orientation="Vertical">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Image Source="{Binding imageSorceBackgrond}" Aspect="Fill" Grid.Row="0"/>
+                        <StackLayout Orientation="Vertical" Margin="30" Grid.Row="0">
+                            <StackLayout>
+                                <Image Source="{Binding imageSorceLogo}" Aspect="AspectFit" Margin="10" HeightRequest="200" WidthRequest="200"  VerticalOptions="Center" HorizontalOptions="Center"/>
+                            </StackLayout>
+                            <StackLayout>
+                                <Entry Text="{Binding oUser.email, Mode=TwoWay}" x:Name="EmailEntry" 
+                                       TextColor="Gray" Placeholder="Email" PlaceholderColor="Gray" 
+                                       Keyboard="Email" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                            </StackLayout>
+                            <StackLayout>
+                                <Entry Text="{Binding oUser.password, Mode=TwoWay}" x:Name="PasswordEntry" 
+                                       TextColor="Gray" Placeholder="Password" PlaceholderColor="Gray" 
+                                       IsPassword="True" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                            </StackLayout>
+                            <StackLayout>
+                                <Label Text="{Binding Message, Mode=OneWay}" TextColor="Gold"/>
+                            </StackLayout>
+                            <StackLayout>
+                                <Button Text="Iniciar sesión" BackgroundColor="#0072BD" TextColor="White" 
+                                        FontSize="18" Command="{Binding LoginCommand}"/>
+                            </StackLayout>
+                            <StackLayout>
+                                <Button Text="¿Olvidaste tu Email o Contraseña?" BackgroundColor="Transparent" 
+                                        TextColor="White" FontSize="18" Command="{Binding LoginCommand}"/>
+                            </StackLayout>
+                        </StackLayout>
+                        <ActivityIndicator Color="#2E64FE" IsRunning="{Binding IsBusy }" Grid.Row="0" HeightRequest="200"/>
+                    </Grid>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" BackgroundColor="White">
+                    <StackLayout Orientation="Vertical" Margin="30">
+                        <StackLayout>
+                            <Button Text="Registrar nuevo usuario" BackgroundColor="Transparent" 
+                                        TextColor="Black" FontSize="18" Command="{Binding RegisterCommand}"/>
+                        </StackLayout>
+                        <StackLayout>
+                            <Button Text="Ingresar con Facebook" BackgroundColor="#3b5998" 
+                                        TextColor="White" FontSize="18" Command="{Binding LoginCommand}"/>
+                        </StackLayout>
+                        <StackLayout>
+                            <Button Text="Ingresar con Twitter" BackgroundColor="#1DA1F2" 
+                                        TextColor="White" FontSize="18" Command="{Binding LoginCommand}"/>
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

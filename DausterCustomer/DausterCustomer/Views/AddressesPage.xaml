@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DausterCustomer.Views.AddressesPage"
+             Title="Registrar dirección">
+    <ContentPage.Content>
+        <ScrollView>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Image Source="{Binding imageSorceBackgrond}" Aspect="Fill" Grid.Row="0"/>
+
+                <StackLayout Grid.Row="0" Orientation="Vertical" Margin="30">
+                    <StackLayout Orientation="Horizontal">
+                        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                            <Entry Text="{Binding oAddress.street, Mode=TwoWay}" TextColor="Gray" Placeholder="Calle" PlaceholderColor="Gray" 
+                                   Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                            <Label Text="{Binding StreetError, Mode=OneWay}" IsVisible="{Binding bStreetError}" TextColor="Gold"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Vertical">
+                            <Image Source="{Binding imageSorceMarker}" HeightRequest="32" WidthRequest="32" HorizontalOptions="Center" VerticalOptions="Center">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding TapGestureRecognizerSearchLocationCommand}">
+                                    </TapGestureRecognizer>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <StackLayout Orientation="Vertical" Grid.Column="0" HorizontalOptions="FillAndExpand">
+                            <Entry Text="{Binding oAddress.exterior, Mode=TwoWay}" TextColor="Gray" Placeholder="No. Exterior" PlaceholderColor="Gray" 
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                                <Label Text="{Binding ExtError, Mode=OneWay}" IsVisible="{Binding bExtError}" TextColor="Gold"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Vertical" Grid.Column="1" HorizontalOptions="FillAndExpand">
+                            <Entry Text="{Binding oAddress.interior, Mode=TwoWay}" TextColor="Gray" Placeholder="No. Interior" PlaceholderColor="Gray" 
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                            <Label Text="{Binding ExtError, Mode=OneWay}" IsVisible="{Binding bExtError}" TextColor="Gold"/>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <Entry Text="{Binding oAddress.cp, Mode=TwoWay}" TextColor="Gray" Placeholder="CP" PlaceholderColor="Gray" 
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                        <Label Text="{Binding CpError, Mode=OneWay}" IsVisible="{Binding bCpError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <Entry Text="{Binding oAddress.location, Mode=TwoWay}" TextColor="Gray" Placeholder="Localidad" PlaceholderColor="Gray" 
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                        <Label Text="{Binding LocationError, Mode=OneWay}" IsVisible="{Binding bLocationError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <Picker BackgroundColor="White" ItemsSource="{Binding ContriesPiker}" ItemDisplayBinding="{Binding name}" 
+                                Title="Estado" SelectedItem="{ Binding CountrySelect, Mode=TwoWay}">
+                        </Picker>
+                        <Label Text="{Binding ContryError, Mode=OneWay}" IsVisible="{Binding bContryError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <Picker BackgroundColor="White" ItemsSource="{Binding StatesPikers}" ItemDisplayBinding="{Binding name}" 
+                                Title="Pais" SelectedItem="{ Binding StateSelect, Mode=TwoWay}">
+                        </Picker>
+                        <Label Text="{Binding StateError, Mode=OneWay}" IsVisible="{Binding bStateError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Button Text="Registrar" BackgroundColor="#0072BD" TextColor="White" 
+                                    FontSize="18" Command="{Binding RegisterCommand}"/>
+                    </StackLayout>
+                </StackLayout>
+                <ActivityIndicator Color="#2E64FE" IsRunning="{Binding IsBusy }" Grid.Row="0"/>
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
