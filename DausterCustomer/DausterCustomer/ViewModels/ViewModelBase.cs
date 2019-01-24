@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace DausterCustomer.ViewModels
 {
@@ -110,5 +108,10 @@ namespace DausterCustomer.ViewModels
         /// <param name="propertyName">Property name.</param>
         protected void OnPropertyChanged([CallerMemberName]string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+        public void showMenu() {
+            var mdp = (Application.Current.MainPage as MasterDetailPage);
+            var navPage = mdp.Detail as NavigationPage;
+            mdp.IsPresented = true;
+        }
     }
 }

@@ -71,7 +71,7 @@ namespace DausterCustomer.ViewModels
                     }
                 }
 
-                if (oUser.password == null)
+                if (oUser.password == null) 
                 {
                     sError += sComa + "La contraseña es obligatoria";
                     IsBusy = false;
@@ -79,18 +79,34 @@ namespace DausterCustomer.ViewModels
 
                 if (String.IsNullOrEmpty(sError))
                 {
-                    oUser.remember_me = true;
-                    User userCurrent = await App.oServiceManager.LoginAsync(oUser);
-                    Settings.IsLoggedIn = userCurrent.success;
+                    UserLogin userCurrent = await App.oServiceManager.LoginAsync(oUser);
 
-                    if (Settings.IsLoggedIn)
+                    if (userCurrent.success)
                     {
-                        await Navigation.PushAsync(new RegisterPage());
+                        Settings.IsLoggedIn = true;
+                        Settings.AccessToken = userCurrent.token;
+
+                        if (userCurrent.nextStep == Constants.HOME) {
+                            App.Current.MainPage = new MasterDetailPage()
+                            {
+                                Master = new MasterPage() { Title = "Main Page" },
+                                Detail = new NavigationPage(new HomePage())
+                            };
+                        }
+
+                        if (userCurrent.nextStep == Constants.REGISTER)
+                            await Navigation.PushAsync(new RegisterPage());
+
+                        if (userCurrent.nextStep == Constants.ADDRESS)
+                            await Navigation.PushAsync(new AddressesPage());
+
+                        if (userCurrent.nextStep == Constants.BILLING)
+                            await Navigation.PushAsync(new BillingPage());
                     }
                     else
                     {
                         IsBusy = false;
-                        await App.Current.MainPage.DisplayAlert("Notificación", userCurrent.message, "Ok");
+                        await App.Current.MainPage.DisplayAlert("Notificación", userCurrent.error.ToString(), "Ok");
                     }
                 }
                 else
@@ -108,13 +124,7 @@ namespace DausterCustomer.ViewModels
 
         public async void redirectRegister()
         {
-            IsBusy = true;
-            App.KindPersonPiker = await Task.Run(() => App.oServiceManager.GetKindPersons());
-            App.CountriesPiker = await Task.Run(() => App.oServiceManager.GetContry());
-            App.StatesPiker = await Task.Run(() => App.oServiceManager.GetStates());
-            IsBusy = false;
             await Navigation.PushAsync(new RegisterPage());
-
         }
     }
 }

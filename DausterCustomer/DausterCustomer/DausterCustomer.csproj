@@ -12,27 +12,50 @@
   <ItemGroup>
     <None Remove="Images\bk_inicial.jpg" />
     <None Remove="Images\bk_login.jpg" />
+    <None Remove="Images\ic_accept.png" />
+    <None Remove="Images\ic_add.png" />
+    <None Remove="Images\ic_back.png" />
     <None Remove="Images\ic_logo.png" />
-    <None Remove="Images\marker_blue.png" />
-    <None Remove="Images\marker_white.png" />
+    <None Remove="Images\ic_marker.png" />
+    <None Remove="Images\ic_menu.png" />
+    <None Remove="Images\ic_menu_black.png" />
+    <None Remove="Images\mapa-marcador.png" />
+    <None Remove="Images\profiler.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Images\bk_inicial.jpg" />
     <EmbeddedResource Include="Images\bk_login.jpg" />
+    <EmbeddedResource Include="Images\ic_accept.png" />
+    <EmbeddedResource Include="Images\ic_add.png" />
+    <EmbeddedResource Include="Images\ic_back.png" />
     <EmbeddedResource Include="Images\ic_logo.png" />
-    <EmbeddedResource Include="Images\marker_blue.png" />
-    <EmbeddedResource Include="Images\marker_white.png" />
+    <EmbeddedResource Include="Images\ic_marker.png" />
+    <EmbeddedResource Include="Images\ic_menu.png" />
+    <EmbeddedResource Include="Images\ic_menu_black.png" />
+    <EmbeddedResource Include="Images\mapa-marcador.png" />
+    <EmbeddedResource Include="Images\profiler.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="DurianCode.PlacesSearchBar" Version="2.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
     <PackageReference Include="sqlite-net-pcl" Version="1.5.231" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.5.0.6" />
-    <PackageReference Include="Xam.Plugin.Iconize" Version="3.4.0.100" />
+    <PackageReference Include="Xam.Plugin.Iconize" Version="3.4.0.103" />
     <PackageReference Include="Xam.Plugins.Forms.ImageCircle" Version="3.0.0.5" />
     <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
+    <PackageReference Include="Xamarin.Essentials" Version="0.11.0-preview" />
     <PackageReference Include="Xamarin.Forms" Version="3.4.0.1008975" />
+    <PackageReference Include="Xamarin.Forms.GoogleMaps" Version="3.0.4" />
+    <PackageReference Include="XamarinFastEntry.Behaviors" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\DeliveryPage.xaml.cs">
+      <DependentUpon>DeliveryPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +63,12 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\BillingPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\DeliveryPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\HelpPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\HomePage.xaml">
@@ -51,10 +80,34 @@
     <EmbeddedResource Update="Views\MasterPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\MyTripsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\NavigationItem.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\OtherChargesPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\PaymentMethods\PaymenthMethodsCreatePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\PaymentMethods\PaymenthMethodsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\PaymentsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\PickUpPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\QuotationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\RegisterPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SearchDriverPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

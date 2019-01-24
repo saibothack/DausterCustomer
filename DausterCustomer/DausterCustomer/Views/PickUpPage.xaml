@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DausterCustomer.Views.PickUpPage">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Orientation="Vertical">
+                <StackLayout BackgroundColor="Black" Orientation="Vertical">
+                    <StackLayout HorizontalOptions="Start">
+                        <Image Source="{Binding imgSourceBack}" Margin="20, 20, 20, 0">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BackCommand}"></TapGestureRecognizer>
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </StackLayout>
+                    <StackLayout Margin="20">
+                        <Label Text="Datos de Recolección" TextColor="White" HorizontalOptions="Center" FontSize="Large"></Label>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" Margin="20">
+                    <StackLayout Orientation="Vertical" Grid.Column="0" HorizontalOptions="FillAndExpand">
+                        <Entry Text="{Binding oPickUp.companyName, Mode=TwoWay}" TextColor="Gray" Placeholder="Empresa" PlaceholderColor="Gray" 
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                        <Label Text="{Binding companyNameError, Mode=OneWay}" IsVisible="{Binding bcompanyNameError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" Grid.Column="0" HorizontalOptions="FillAndExpand">
+                        <Entry Text="{Binding oPickUp.name, Mode=TwoWay}" TextColor="Gray" Placeholder="Nombre *" PlaceholderColor="Gray" 
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                        <Label Text="{Binding nameError, Mode=OneWay}" IsVisible="{Binding bnameError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" Grid.Column="0" HorizontalOptions="FillAndExpand">
+                        <Entry Text="{Binding oPickUp.surnames, Mode=TwoWay}" TextColor="Gray" Placeholder="Apellido *" PlaceholderColor="Gray" 
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                        <Label Text="{Binding surnamesError, Mode=OneWay}" IsVisible="{Binding bsurnamesError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" Grid.Column="0" HorizontalOptions="FillAndExpand">
+                        <Entry Text="{Binding oPickUp.phone, Mode=TwoWay}" TextColor="Gray" Placeholder="Teléfono *" PlaceholderColor="Gray" 
+                               Keyboard="Numeric" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                        <Label Text="{Binding phoneError, Mode=OneWay}" IsVisible="{Binding bphoneError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" Grid.Column="0" HorizontalOptions="FillAndExpand">
+                        <Entry Text="{Binding oPickUp.packages, Mode=TwoWay}" TextColor="Gray" Placeholder="No. Paquetes *" PlaceholderColor="Gray" 
+                               Keyboard="Numeric" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                        <Label Text="{Binding packagesError, Mode=OneWay}" IsVisible="{Binding bpackagesError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" Grid.Column="0" HorizontalOptions="FillAndExpand">
+                        <Entry Text="{Binding oPickUp.shippingDescription, Mode=TwoWay}" TextColor="Gray" Placeholder="Descripción" PlaceholderColor="Gray" 
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                        <Label Text="{Binding shippingDescriptionError, Mode=OneWay}" IsVisible="{Binding bshippingDescriptionError}" TextColor="Gold"/>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DausterCustomer.Views.OtherChargesPage"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Orientation="Vertical">
+                <StackLayout BackgroundColor="Black" Orientation="Vertical">
+                    <StackLayout HorizontalOptions="Start">
+                        <Image Source="{Binding imgSourceBack}" Margin="20">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BackCommand}"></TapGestureRecognizer>
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label Text="Agregar compra" TextColor="White" HorizontalOptions="Center" FontSize="Large"></Label>
+                    </StackLayout>
+                    <StackLayout Margin="20">
+
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Margin="20" Orientation="Vertical">
+                    <StackLayout>
+                        <Entry x:Name="NameEntry" Placeholder="Nombre" PlaceholderColor="Gray" Keyboard="Text" FontSize="Medium" 
+                               Text="{Binding oOtherCharges.name, Mode=TwoWay}"/>
+                        <Label Text="{Binding NameError, Mode=OneWay}" IsVisible="{Binding bNameError}" TextColor="Gray"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Entry x:Name="CostEntry" Placeholder="Costo" PlaceholderColor="Gray" Keyboard="Numeric" FontSize="Medium"
+                               Text="{Binding oOtherCharges.cost, Mode=TwoWay}"/>
+                        <Label Text="{Binding DescriptionError, Mode=OneWay}" IsVisible="{Binding bDescriptionError}" TextColor="Gray"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Editor x:Name="DescriptionEntry" Keyboard="Chat" Placeholder="Descripción" PlaceholderColor="Gray"
+                                Text="{Binding oOtherCharges.description, Mode=TwoWay}"/>
+                        <Label Text="{Binding CostError, Mode=OneWay}" IsVisible="{Binding bCostError}" TextColor="Gray"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Button Text="Agregar" BackgroundColor="#01b2ff" TextColor="White" HeightRequest="40" Command="{Binding addOtherCharge}"/>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

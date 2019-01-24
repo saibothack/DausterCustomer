@@ -7,6 +7,7 @@ using DausterCustomer.Utils;
 using DausterCustomer.Helpers;
 using DausterCustomer.Views;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace DausterCustomer.ViewModels
 {
@@ -23,6 +24,9 @@ namespace DausterCustomer.ViewModels
         public Task Initialization { get; private set; }
         public ImageSource imageSorceBackgrond { get; set; }
         public List<KindPersons> KindPersonPiker { get; set; }
+        public bool isVisiblePassword { get; set; }
+
+        public string buttonText { get; set; }
 
         private KindPersons _KindPersonSelect;
 
@@ -144,6 +148,23 @@ namespace DausterCustomer.ViewModels
             }
         }
 
+        private Boolean _bBirthdayError;
+        public Boolean bBirthdayError
+        {
+            get { return _bBirthdayError; }
+            set { SetProperty(ref _bBirthdayError, value); }
+        }
+
+        private String _birthdayError;
+        public String birthdayError
+        {
+            get { return _birthdayError; }
+            set
+            {
+                SetProperty(ref _birthdayError, value);
+            }
+        }
+
         private Boolean _bPasswordConfirmError;
         public Boolean bPasswordConfirmError
         {
@@ -155,9 +176,17 @@ namespace DausterCustomer.ViewModels
 
         public RegisterPageViewModel()
         {
+            KindPersonPiker = App.KindPersonPiker;
             Initialization = InitializeAsync();
             imageSorceBackgrond = ImageSource.FromResource("DausterCustomer.Images.bk_inicial.jpg");
-            KindPersonPiker = App.KindPersonPiker;
+            
+            if (!Settings.IsLoggedIn) {
+                buttonText = "Registrar";
+                isVisiblePassword = true;
+            } else {
+                buttonText = "Modificar";
+                isVisiblePassword = false;
+            }
 
             DateTime dateTime = DateTime.Now;
             MinimumDate = dateTime.AddYears(-80);
@@ -172,7 +201,8 @@ namespace DausterCustomer.ViewModels
             //Consultamos la información cuando el usurio este logueado.
             if (Settings.IsLoggedIn) {
                 IsBusy = true;
-                oUser = await App.oServiceManager.GetUser(Settings.IdUserLogin);
+                oUser = await App.oServiceManager.GetUser();
+                KindPersonSelect = KindPersonPiker.Find(x => x.id.Equals(oUser.kind_persons_id));
                 IsBusy = false;
             }
         }
@@ -182,37 +212,95 @@ namespace DausterCustomer.ViewModels
             if (validate())
             {
                 oUser.kind_persons_id = KindPersonSelect.id;
-                oUser.authorized = true;
-                User userCurrent = await App.oServiceManager.StoreUser(oUser);
+                UserLogin userCurrent = await App.oServiceManager.SetUser(oUser);
 
-                if (userCurrent != null)
+                if (Settings.IsLoggedIn)
                 {
+                    IsBusy = false;
                     if (userCurrent.success)
                     {
-                        Settings.IdUserLogin = userCurrent.id;
-                        Settings.NameUserLogin = userCurrent.name + ' ' + userCurrent.surnames;
-                        Settings.AccessToken = userCurrent.access_token;
-                        Settings.AccessTokenType = userCurrent.token_type;
-                        Settings.IsLoggedIn = true;
-
-                        App.Current.MainPage = new AddressesPage();
+                        await App.Current.MainPage.DisplayAlert("Notificación", "Se modificaron sus datos correctamente.", "Ok");
                     }
                     else
                     {
-                        IsBusy = false;
-                        if (string.IsNullOrEmpty(userCurrent.message))
-                        {
-                            await App.Current.MainPage.DisplayAlert("Notificación", "Hubo un error en el sistema, por favor intenta más tarde.", "Ok");
-                        }
-                        else {
-                            await App.Current.MainPage.DisplayAlert("Notificación", userCurrent.message, "Ok");
-                        }
+                        await App.Current.MainPage.DisplayAlert("Notificación", "Hubo un error en el sistema, por favor intenta más tarde.", "Ok");
                     }
                 }
                 else
                 {
-                    IsBusy = false;
-                    await App.Current.MainPage.DisplayAlert("Notificación", "Hubo un error en el sistema, por favor intenta más tarde.", "Ok");
+                    if (userCurrent != null)
+                    {
+                        if (userCurrent.success)
+                        {
+                            Settings.IsLoggedProccesIn = true;
+                            Settings.NameUserLogin = oUser.name + ' ' + oUser.surnames;
+                            Settings.AccessToken = userCurrent.token;
+                            Settings.IsLoggedIn = true;
+
+                            App.Current.MainPage = new AddressesPage();
+                        }
+                        else
+                        {
+                            IsBusy = false;
+                            if (userCurrent.error != null)
+                            {
+                                foreach (JProperty property in userCurrent.error.Properties()) {
+                                    JArray jArray = null;
+
+                                    switch (property.Name) {
+                                        case "kind_persons_id":
+                                            kindPersonError = "Seleccione el tipo de persona.";
+                                            bKindPersonError = true;
+                                            break;
+                                        case "name":
+                                            nameError = "Ingrese sus nombres.";
+                                            bNameError = true;
+                                            break;
+                                        case "surnames":
+                                            surnamesError = "Ingrese sus apellidos.";
+                                            bSurnamesError = true;
+                                            break;
+                                        case "birthday":
+                                            birthdayError = "Su fecha de nacimiento no tiene el formato correcto";
+                                            bBirthdayError = true;
+                                            break;
+                                        case "email":
+                                            jArray = (JArray)property.Value;
+
+                                            foreach (JValue item in jArray.Children()) {
+                                                switch (item.Value.ToString()) {
+                                                    case "validation.unique":
+                                                        emailError = "El email ya esta registrado.";
+                                                        bEmailError = true;
+                                                        break;
+                                                    default:
+                                                        emailError = "Ingrese su email.";
+                                                        bEmailError = true;
+                                                        break;
+                                                }
+                                            }
+
+                                                break;
+                                        case "phone":
+                                            phoneError = "Ingrese su teléfono.";
+                                            bPhoneError = true;
+                                            break;
+                                    }
+                                }
+                                
+                                //await App.Current.MainPage.DisplayAlert("Notificación", "Hubo un error en el sistema, por favor intenta más tarde.", "Ok");
+                            }
+                            else
+                            {
+                                await App.Current.MainPage.DisplayAlert("Notificación", "Por favor verifique los campos obligatorios", "Ok");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        IsBusy = false;
+                        await App.Current.MainPage.DisplayAlert("Notificación", "Hubo un error en el sistema, por favor intenta más tarde.", "Ok");
+                    }
                 }
             }
             else
@@ -292,39 +380,48 @@ namespace DausterCustomer.ViewModels
                 }
             }
 
-            if (string.IsNullOrEmpty(oUser.password))
+            if (isVisiblePassword)
             {
-                bSuccess = false;
-                passwordError = "Ingrese su contraseña.";
-                bPasswordError = true;
-            } else {
-                if (!global.IsPasswordValid(oUser.password))
-                {
-                    passwordError = "El formato de la contraseña debe de contener mayusculas, minusculas, caracteres alfanumericos y conener por lo menos 8 caracteres.";
-                    bPasswordError = true;
-                }
-                else {
-                    passwordError = string.Empty;
-                    bPasswordError = false;
-                }
-            }
-
-            if (string.IsNullOrEmpty(oUser.password_confirmation))
-            {
-                bSuccess = false;
-                passwordConfirmError = "Confirme su contraseña.";
-                bPasswordConfirmError = true;
-            }
-            else {
-                if (oUser.password != oUser.password_confirmation)
+                if (string.IsNullOrEmpty(oUser.password))
                 {
                     bSuccess = false;
-                    passwordConfirmError = "Las contraseñas no coinciden.";
-                    bPasswordConfirmError = true;
+                    passwordError = "Ingrese su contraseña.";
+                    bPasswordError = true;
                 }
-                else {
-                    passwordConfirmError = string.Empty;
-                    bPasswordConfirmError = false;
+                else
+                {
+                    if (!global.IsPasswordValid(oUser.password))
+                    {
+                        passwordError = "El formato de la contraseña debe de contener mayusculas, minusculas, caracteres alfanumericos y conener por lo menos 8 caracteres.";
+                        bPasswordError = true;
+                        bSuccess = false;
+                    }
+                    else
+                    {
+                        passwordError = string.Empty;
+                        bPasswordError = false;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(oUser.password_confirmation))
+                {                    
+                    passwordConfirmError = "Confirme su contraseña.";
+                    bPasswordConfirmError = true;
+                    bSuccess = false;
+                }
+                else
+                {
+                    if (oUser.password != oUser.password_confirmation)
+                    {
+                        passwordConfirmError = "Las contraseñas no coinciden.";
+                        bPasswordConfirmError = true;
+                        bSuccess = false;
+                    }
+                    else
+                    {
+                        passwordConfirmError = string.Empty;
+                        bPasswordConfirmError = false;
+                    }
                 }
             }
 

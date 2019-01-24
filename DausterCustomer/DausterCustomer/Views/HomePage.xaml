@@ -1,12 +1,63 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="DausterCustomer.Views.HomePage">
+             xmlns:maps="clr-namespace:Xamarin.Forms.GoogleMaps;assembly=Xamarin.Forms.GoogleMaps"
+             xmlns:places="clr-namespace:DurianCode.PlacesSearchBar;assembly=PlacesSearchBar"
+             x:Class="DausterCustomer.Views.HomePage"
+             NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+
+            <StackLayout Grid.Row="0" Grid.RowSpan="4">
+                <maps:Map x:Name="map" VerticalOptions="FillAndExpand"/>
+            </StackLayout>
+
+            <ActivityIndicator x:Name="acIndicator" Grid.Row="0" HeightRequest="200" Grid.RowSpan="4" IsRunning="false" Color="LightGray" IsVisible="False"/>
+
+            <StackLayout Grid.Row="0" Grid.RowSpan="4" VerticalOptions="Center" HorizontalOptions="Center">
+                <Image Source="{Binding imgSourceMarker}" HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="30" HeightRequest="30" Margin="0,0,0,15"/>
+            </StackLayout>
+
+            <StackLayout Grid.Row="0" HorizontalOptions="StartAndExpand" Orientation="Horizontal">
+                <StackLayout HorizontalOptions="StartAndExpand">
+                    <Image Source="{Binding imageSorceMenu}" Margin="20">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ShowMenuCommand}"></TapGestureRecognizer>
+                        </Image.GestureRecognizers> 
+                    </Image>
+                </StackLayout>
+                <StackLayout HorizontalOptions="EndAndExpand">
+                    <Button Text="Agregar Marcador" Margin="0, 15, 0, 0" BackgroundColor="#01b2ff" TextColor="White" HeightRequest="40" Clicked="Button_AddMarker"/>
+                </StackLayout>
+            </StackLayout>
+
+            <StackLayout Grid.Row="1" Margin="10, 10, 10, 0" Orientation="Vertical">
+                <places:PlacesBar x:Name="googleSearChBar"/>
+                <ActivityIndicator x:Name="spinner" IsRunning="false" Color="LightGray" IsVisible="False"/>
+                <ListView x:Name="results_list" BackgroundColor="White" SeparatorVisibility="Default" IsVisible="False">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell Text="{Binding Description}" Detail="{Binding Description}" TextColor="Black"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+
+            <StackLayout Grid.Row="3" Orientation="Horizontal" Margin="10, 0, 10, 0">
+                <StackLayout HorizontalOptions="FillAndExpand">
+                    <Button Text="Limpiar" Margin="0, 0, 0, 50" BackgroundColor="#01b2ff" TextColor="White" HeightRequest="40" Clicked="Button_Clear"/>
+                </StackLayout>
+                <StackLayout HorizontalOptions="FillAndExpand">
+                    <Button Text="Cotizar" Margin="0, 0, 0, 50" BackgroundColor="#01b2ff" TextColor="White" HeightRequest="40" Clicked="Button_Next"/>
+                </StackLayout>
+            </StackLayout>
+
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

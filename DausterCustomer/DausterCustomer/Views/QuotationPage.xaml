@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DausterCustomer.Views.QuotationPage"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Orientation="Vertical">
+                <StackLayout Orientation="Vertical" BackgroundColor="Green">
+                    <StackLayout HorizontalOptions="Start">
+                        <Image Source="{Binding imgSourceBack}" Margin="20, 20, 20, 10">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BackCommand}"></TapGestureRecognizer>
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" Margin="20,0,20,0">
+                        <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal">
+                            <Label Text="Tiempo" TextColor="White" FontSize="Default"/>
+                            <Label Text="{Binding sTime}" TextColor="White" FontSize="Default"/>
+                        </StackLayout>
+                        <StackLayout HorizontalOptions="EndAndExpand" Orientation="Horizontal">
+                            <Label Text="Distancia" TextColor="White" FontSize="Default" />
+                            <Label Text="{Binding sMiles}" TextColor="White" FontSize="Default" />
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout HorizontalOptions="Center" Margin="20">
+                        <Label Text="{Binding fCharges}" TextColor="White" FontSize="Large" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" Margin="20,0,20,20">
+                        <StackLayout HorizontalOptions="StartAndExpand">
+                            <Label Text="Compras" TextColor="White" FontSize="Default" />
+                        </StackLayout>
+                        <StackLayout HorizontalOptions="EndAndExpand">
+                            <Image Source="{Binding imgSourceAdd}">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding AddCommand}"></TapGestureRecognizer>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Margin="20" Orientation="Vertical">
+                    <StackLayout>
+                        <ListView x:Name="listView" ItemsSource="{Binding lsOtherCharge}" SeparatorVisibility="Default" HeightRequest="110"
+                                  SelectionMode="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell x:Name="viewCell">
+                                        <ViewCell.ContextActions>
+                                            <MenuItem Command="{Binding Path=BindingContext.DeleteItemCommand, Source={x:Reference Name=listView}}" 
+                                                      CommandParameter="{Binding Source={x:Reference viewCell}}" Text="Eliminar" IsDestructive="True"/>
+                                        </ViewCell.ContextActions>
+                                        <StackLayout Padding="15,0"  Orientation="Vertical">
+                                            <Label Text="{Binding name}" TextColor="Gray"/>
+                                            <Label Text="{Binding cost, StringFormat='{0:C}'}" TextColor="#01b2ff"/>
+                                        </StackLayout>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackLayout>
+                    <StackLayout>
+                        <Picker ItemsSource="{Binding lsVehicles}" ItemDisplayBinding="{Binding name}"  Title="Vehículo" SelectedIndex="0" 
+                                SelectedItem="{Binding itemSelectVehicle, Mode=TwoWay}">
+                        </Picker>
+                    </StackLayout>
+                    <StackLayout>
+                        <Picker ItemsSource="{Binding oPaymentMethodSource}" ItemDisplayBinding="{Binding card}"  Title="Pago"
+                                SelectedItem="{Binding itemSelectPaymentMethod, Mode=TwoWay}">
+                        </Picker>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <StackLayout HorizontalOptions="Start">
+                            <Switch IsToggled="false" />
+                        </StackLayout>
+                        <StackLayout HorizontalOptions="FillAndExpand">
+                            <Label Text="Aceptar terminos y condiciones" FontSize="Medium" />
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout>
+                        <Button Text="Continuar" BackgroundColor="#01b2ff" TextColor="White" HeightRequest="40"/>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

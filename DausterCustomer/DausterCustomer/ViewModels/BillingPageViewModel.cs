@@ -2,13 +2,15 @@
 using DausterCustomer.Models;
 using DausterCustomer.Utils;
 using DausterCustomer.Views;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace DausterCustomer.ViewModels
 {
-    public class BillingPageViewModel : ViewModelBase
+    public class BillingPageViewModel : ViewModelBase, IAsyncInitialization
     {
         Global global = new Global();
 
@@ -20,6 +22,7 @@ namespace DausterCustomer.ViewModels
         #endregion
 
         #region Properties
+        public Task Initialization { get; private set; }
         public ImageSource imageSorceBackgrond { get; set; }
         public ImageSource imageSorceMarker { get; set; }
         public List<Country> ContriesPiker { get; set; }
@@ -167,6 +170,34 @@ namespace DausterCustomer.ViewModels
             get { return _bStateError; }
             set { SetProperty(ref _bStateError, value); }
         }
+
+        private string _ColonyError;
+        public string ColonyError
+        {
+            get { return _ColonyError; }
+            set { SetProperty(ref _ColonyError, value); }
+        }
+
+        private bool _bColonyError;
+        public bool bColonyError
+        {
+            get { return _bColonyError; }
+            set { SetProperty(ref _bColonyError, value); }
+        }
+
+        private string _CityError;
+        public string CityError
+        {
+            get { return _CityError; }
+            set { SetProperty(ref _CityError, value); }
+        }
+
+        private bool _bCityError;
+        public bool bCityError
+        {
+            get { return _bCityError; }
+            set { SetProperty(ref _bCityError, value); }
+        }
         #endregion
 
         public BillingPageViewModel()
@@ -177,13 +208,32 @@ namespace DausterCustomer.ViewModels
             ContriesPiker = App.CountriesPiker;
             StatesPikers = App.StatesPiker;
 
+            Initialization = InitializeAsync();
+
             TapGestureRecognizerSearchLocationCommand = new Command(SearchLocation);
             RegisterBillingCommand = new Command(RegisterBilling);
             OmitirCommand = new Command(OmitirFunction);
         }
 
+        private async Task InitializeAsync()
+        {
+            //Consultamos la información cuando el usurio este logueado.
+            if (!Settings.IsLoggedProccesIn)
+            {
+                IsBusy = true;
+                oBilling = await App.oServiceManager.GetBilling();
+                CountrySelect = ContriesPiker.Find(x => x.id.Equals(oBilling.countries_id));
+                StateSelect = StatesPikers.Find(x => x.id.Equals(oBilling.states_id));
+                IsBusy = false;
+            }
+        }
+
         private void OmitirFunction() {
-            App.Current.MainPage = new HomePage();
+            App.Current.MainPage = new MasterDetailPage()
+            {
+                Master = new MasterPage() { Title = "Main Page" },
+                Detail = new NavigationPage(new HomePage())
+            };
         }
 
         async private void RegisterBilling()
@@ -191,27 +241,175 @@ namespace DausterCustomer.ViewModels
             IsBusy = true;
             if (validate())
             {
-                oBilling.users_id = Settings.IdUserLogin;
                 oBilling.states_id = StateSelect.id;
                 oBilling.countries_id = CountrySelect.id;
-                Billing addresCurrent = await App.oServiceManager.SetBilling(oBilling);
+                UserLogin addresCurrent = await App.oServiceManager.SetBilling(oBilling);
 
-                if (addresCurrent.success)
+                IsBusy = false;
+                if (!Settings.IsLoggedProccesIn)
                 {
-                    App.Current.MainPage = new HomePage();
+                    if (addresCurrent.success)
+                        await App.Current.MainPage.DisplayAlert("Notificación", "Sus datos fueron modificados", "Ok");
+                    else
+                    {
+                        if (addresCurrent.error != null)
+                        {
+                            foreach (JProperty property in addresCurrent.error.Properties())
+                            {
+                                JArray jArray = null;
+
+                                switch (property.Name)
+                                {
+                                    case "street":
+                                        StreetError = "Ingrese la calle";
+                                        bStateError = true;
+                                        break;
+                                    case "exterior":
+                                        ExtError = "Ingrese no. exterior";
+                                        bExtError = true;
+                                        break;
+                                    case "cp":
+                                        CpError = "Ingrese CP";
+                                        bCpError = true;
+                                        break;
+                                    case "location":
+                                        LocationError = "Ingrese su localidad";
+                                        bLocationError = true;
+                                        break;
+                                    case "colony":
+                                        ColonyError = "Ingrese su localidad";
+                                        bColonyError = true;
+                                        break;
+                                    case "city":
+                                        CityError = "Ingrese su localidad";
+                                        bCityError = true;
+                                        break;
+                                    case "countries_id":
+                                        CountryError = "Ingrese su pais";
+                                        bCountryError = true;
+                                        break;
+                                    case "states_id":
+                                        StateError = "Ingrese su estado";
+                                        bStateError = true;
+                                        break;
+                                    case "name":
+                                        NameError = "Ingrese la Razón social";
+                                        bNameError = true;
+                                        break;
+                                    case "RFC":
+                                        jArray = (JArray)property.Value;
+
+                                        foreach (JValue item in jArray.Children())
+                                        {
+                                            switch (item.Value.ToString())
+                                            {
+                                                case "validation.unique":
+                                                    RFCError = "Su RFC ya esta registrado";
+                                                    bRFCError = true;
+                                                    break;
+                                                default:
+                                                    RFCError = "Ingrese su RFC";
+                                                    bRFCError = true;
+                                                    break;
+                                            }
+                                        }
+
+                                        break;
+                                }
+                            }
+                        }
+                        else {
+                            await App.Current.MainPage.DisplayAlert("Notificación", "Por favor verifique los datos obligatorios", "Ok");
+                        }
+                    }
                 }
                 else
                 {
-                    IsBusy = false;
-                    if (string.IsNullOrEmpty(addresCurrent.message))
+                    if (addresCurrent.success)
                     {
-                        await App.Current.MainPage.DisplayAlert("Notificación", "Por favor ingrese a la plataforme y complete su registro.", "Ok");
+                        App.Current.MainPage = new MasterDetailPage()
+                        {
+                            Master = new MasterPage() { Title = "Main Page" },
+                            Detail = new NavigationPage(new HomePage())
+                        };
                     }
                     else
                     {
-                        await App.Current.MainPage.DisplayAlert("Notificación", addresCurrent.message, "Ok");
+                        if (addresCurrent.error != null)
+                        {
+                            foreach (JProperty property in addresCurrent.error.Properties())
+                            {
+                                JArray jArray = null;
+
+                                switch (property.Name)
+                                {
+                                    case "street":
+                                        StreetError = "Ingrese la calle";
+                                        bStateError = true;
+                                        break;
+                                    case "exterior":
+                                        ExtError = "Ingrese no. exterior";
+                                        bExtError = true;
+                                        break;
+                                    case "cp":
+                                        CpError = "Ingrese CP";
+                                        bCpError = true;
+                                        break;
+                                    case "location":
+                                        LocationError = "Ingrese su localidad";
+                                        bLocationError = true;
+                                        break;
+                                    case "colony":
+                                        ColonyError = "Ingrese su localidad";
+                                        bColonyError = true;
+                                        break;
+                                    case "city":
+                                        CityError = "Ingrese su localidad";
+                                        bCityError = true;
+                                        break;
+                                    case "countries_id":
+                                        CountryError = "Ingrese su pais";
+                                        bCountryError = true;
+                                        break;
+                                    case "states_id":
+                                        StateError = "Ingrese su estado";
+                                        bStateError = true;
+                                        break;
+                                    case "name":
+                                        NameError = "Ingrese la Razón social";
+                                        bNameError = true;
+                                        break;
+                                    case "RFC":
+                                        jArray = (JArray)property.Value;
+
+                                        foreach (JValue item in jArray.Children())
+                                        {
+                                            switch (item.Value.ToString())
+                                            {
+                                                case "validation.unique":
+                                                    RFCError = "Su RFC ya esta registrado";
+                                                    bRFCError = true;
+                                                    break;
+                                                default:
+                                                    RFCError = "Ingrese su RFC";
+                                                    bRFCError = true;
+                                                    break;
+                                            }
+                                        }
+
+                                        break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            await App.Current.MainPage.DisplayAlert("Notificación", "Por favor verifique los datos obligatorios", "Ok");
+                        }
                     }
                 }
+            }
+            else {
+                IsBusy = false;
             }
         }
 
@@ -239,20 +437,20 @@ namespace DausterCustomer.ViewModels
             }
             else
             {
-                StreetError = string.Empty;
-                bStateError = false;
+                NameError = string.Empty;
+                bNameError = false;
             }
 
             if (string.IsNullOrEmpty(oBilling.street))
             {
                 StreetError = "Ingrese la calle";
-                bStateError = true;
+                bStreetError = true;
                 isSuccess = false;
             }
             else
             {
                 StreetError = string.Empty;
-                bStateError = false;
+                bStreetError = false;
             }
 
             if (string.IsNullOrEmpty(oBilling.exterior))
@@ -289,6 +487,30 @@ namespace DausterCustomer.ViewModels
             {
                 LocationError = string.Empty;
                 bLocationError = false;
+            }
+
+            if (string.IsNullOrEmpty(oBilling.colony))
+            {
+                ColonyError = "Ingrese su localidad";
+                bColonyError = true;
+                isSuccess = false;
+            }
+            else
+            {
+                ColonyError = string.Empty;
+                bColonyError = false;
+            }
+
+            if (string.IsNullOrEmpty(oBilling.city))
+            {
+                CityError = "Ingrese su localidad";
+                bCityError = true;
+                isSuccess = false;
+            }
+            else
+            {
+                CityError = string.Empty;
+                bCityError = false;
             }
 
             if (StateSelect == null)

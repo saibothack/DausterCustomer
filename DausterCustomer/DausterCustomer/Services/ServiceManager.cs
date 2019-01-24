@@ -1,6 +1,8 @@
 ﻿using DausterCustomer.Models;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xamarin.Forms.GoogleMaps;
 
 namespace DausterCustomer.Services
 {
@@ -28,48 +30,85 @@ namespace DausterCustomer.Services
         {
             return restService.GetStates();
         }
+
+        public Task<List<TypeCard>> GetTypeCardsAsync()
+        {
+            return restService.GetTypeCardsAsync();
+        }
+
+        public Task<List<Vehicle>> GetVehicleAsync()
+        {
+            return restService.GetVehicleAsync();
+        }
         #endregion
 
         #region User
-        public Task<User> LoginAsync(User item)
+        public Task<UserLogin> LoginAsync(User item)
         {   
             return restService.LoginAsync(item);
         }
 
-        public Task<User> StoreUser(User user)
+        public Task<User> GetUser()
         {
-            return restService.StoreUser(user);
+            return restService.GetUser();
         }
 
-        public Task<User> GetUser(int iUser)
+        
+
+        public Task<Address> GetAddress()
         {
-            return restService.GetUser(iUser);
+            return restService.GetAddress();
         }
 
-        public Task<User> SetUser(User user)
+        
+
+        public Task<Billing> GetBilling()
+        {
+            return restService.GetBilling();
+        }
+
+        
+        #endregion
+
+        #region "Alta usuarios"
+        public Task<UserLogin> SetUser(User user)
         {
             return restService.SetUser(user);
         }
-
-        public Task<Address> GetAddress(Address address)
-        {
-            return restService.GetAddress(address);
-        }
-
-        public Task<Address> SetAddress(Address address)
+        public Task<UserLogin> SetAddress(Address address)
         {
             return restService.SetAddress(address);
         }
-
-        public Task<Billing> GetBilling(Billing billing)
-        {
-            return restService.GetBilling(billing);
-        }
-
-        public Task<Billing> SetBilling(Billing billing)
+        public Task<UserLogin> SetBilling(Billing billing)
         {
             return restService.SetBilling(billing);
         }
+
         #endregion
+
+        public Task<List<PaymentMethods>> GetPaymentMethodsAsync()
+        {
+            return restService.GetPaymentMethodsAsync();
+        }
+
+        public Task<UserLogin> SetPaymenthMethodsAsync(PaymentMethods payment)
+        {
+            return restService.SetPaymenthMethodsAsync(payment);
+        }
+
+        public Task<JObject> getAsyncRouteGoogle(List<Pin> lsPins)
+        {
+            return restService.getAsyncRouteGoogle(lsPins);
+        }
+
+        public Task<float> GetQuotation(Dictionary<string, int> valuesCoordinates)
+        {
+            return restService.GetQuotation(valuesCoordinates);
+        }
+
+        public Task deletePaymentMethod(PaymentMethods paymentMethods)
+        {
+            return restService.deletePaymentMethod(paymentMethods.id);
+        }
     }
 }

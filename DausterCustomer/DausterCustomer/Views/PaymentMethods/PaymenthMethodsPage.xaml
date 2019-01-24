@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DausterCustomer.Views.PaymentMethods.PaymenthMethodsPage"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+        <ScrollView>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackLayout Orientation="Vertical">
+                    <StackLayout BackgroundColor="Black">
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout HorizontalOptions="StartAndExpand">
+                                <Image Source="{Binding imageSorceMenu}" Margin="20">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding MenuCommand}"></TapGestureRecognizer>
+                                    </Image.GestureRecognizers>                                                                     
+                                </Image>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout>
+                            <Label Text="Metódos de pago" TextColor="White" HorizontalOptions="Center" FontSize="Medium"/>
+                        </StackLayout>
+                        <StackLayout HorizontalOptions="End">
+                            <Image Source="{Binding imageSorceAdd}" Margin="20">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding AddCommand}"></TapGestureRecognizer>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout>
+                        <ListView x:Name="listView" ItemsSource="{Binding oPaymentMethodSource, Mode=TwoWay}" SelectionMode="None" SeparatorVisibility="Default">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell x:Name="viewCell">
+                                        <ViewCell.ContextActions>
+                                            <MenuItem Command="{Binding Path=BindingContext.EditCommand, Source={x:Reference Name=listView}}" 
+                                                      CommandParameter="{Binding Source={x:Reference viewCell}}" Text="Editar" />
+                                            <MenuItem Command="{Binding Path=BindingContext.DeleteCommand, Source={x:Reference Name=listView}}" 
+                                                      CommandParameter="{Binding Source={x:Reference viewCell}}" Text="Eliminar" IsDestructive="True"/>
+                                        </ViewCell.ContextActions>
+                                        <StackLayout Orientation="Vertical">
+                                            <StackLayout Orientation="Horizontal">
+                                                <Image Source="{Binding icon}" />
+                                                <Label Text="{Binding card}" TextColor="#f35e20" />
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -17,9 +17,9 @@
                                 <Image Source="{Binding imageSorceLogo}" Aspect="AspectFit" Margin="10" HeightRequest="200" WidthRequest="200"  VerticalOptions="Center" HorizontalOptions="Center"/>
                             </StackLayout>
                             <StackLayout>
-                                <Entry Text="{Binding oUser.email, Mode=TwoWay}" x:Name="EmailEntry" 
-                                       TextColor="Gray" Placeholder="Email" PlaceholderColor="Gray" 
-                                       Keyboard="Email" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                                    <Entry Text="{Binding oUser.email, Mode=TwoWay}" x:Name="EmailEntry" 
+                                           TextColor="Gray" Placeholder="Email" PlaceholderColor="Gray" 
+                                           Keyboard="Email" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
                             </StackLayout>
                             <StackLayout>
                                 <Entry Text="{Binding oUser.password, Mode=TwoWay}" x:Name="PasswordEntry" 

@@ -7,9 +7,6 @@ namespace DausterCustomer.Models
 {
     public class Billing
     {
-        [PrimaryKey]
-        public int id { get; set; }
-        public int users_id { get; set; }
         public int countries_id { get; set; }
         public int states_id { get; set; }
         public string RFC { get; set; }
@@ -19,7 +16,7 @@ namespace DausterCustomer.Models
         public string interior { get; set; }
         public string exterior { get; set; }
         public string street { get; set; }
-        public bool success { get; set; }
-        public string message { get; set; }
+        public string colony { get; set; }
+        public string city { get; set; }
     }
 }

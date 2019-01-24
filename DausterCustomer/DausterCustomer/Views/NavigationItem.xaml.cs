@@ -5,7 +5,7 @@ using Xamarin.Forms.Xaml;
 namespace DausterCustomer.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class NavigationItem : Grid
+	public partial class NavigationItem : Grid
     {
         public NavigationItem()
         {
@@ -107,6 +107,5 @@ namespace DausterCustomer.Views
                 OnPropertyChanged();
             }
         }
-
     }
 }

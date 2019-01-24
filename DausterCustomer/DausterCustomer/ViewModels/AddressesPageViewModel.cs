@@ -1,15 +1,18 @@
 ﻿using DausterCustomer.Models;
 using DausterCustomer.Utils;
 using System.Collections.Generic;
-using Plugin.Geolocator;
 using System.Windows.Input;
 using Xamarin.Forms;
+using Xamarin.Essentials;
 using DausterCustomer.Helpers;
 using DausterCustomer.Views;
+using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace DausterCustomer.ViewModels
 {
-    public class AddressesPageViewModel : ViewModelBase
+    public class AddressesPageViewModel : ViewModelBase, IAsyncInitialization
     {
         Global global = new Global();
 
@@ -20,6 +23,7 @@ namespace DausterCustomer.ViewModels
         #endregion
 
         #region Properties
+        public Task Initialization { get; private set; }
         public ImageSource imageSorceBackgrond { get; set; }
         public ImageSource imageSorceMarker { get; set; }
         public List<Country> ContriesPiker { get; set; }
@@ -32,6 +36,7 @@ namespace DausterCustomer.ViewModels
             get { return _CountrySelect; }
             set { SetProperty(ref _CountrySelect, value); }
         }
+
         private State _StateSelect;
 
         public State StateSelect
@@ -142,39 +147,93 @@ namespace DausterCustomer.ViewModels
 
         #endregion
 
-
         public AddressesPageViewModel()
         {
-            imageSorceBackgrond = ImageSource.FromResource("DausterCustomer.Images.bk_inicial.jpg");
-            imageSorceMarker = ImageSource.FromResource("DausterCustomer.Images.marker_white.png");
-
             ContriesPiker = App.CountriesPiker;
             StatesPikers = App.StatesPiker;
+            Initialization = InitializeAsync();
+
+            imageSorceBackgrond = ImageSource.FromResource("DausterCustomer.Images.bk_inicial.jpg");
+            imageSorceMarker = ImageSource.FromResource("DausterCustomer.Images.marker_white.png");
 
             TapGestureRecognizerSearchLocationCommand = new Command(SearchLocation);
             RegisterAddressesCommand = new Command(RegisterAddress);
         }
 
+        private async Task InitializeAsync()
+        {
+            //Consultamos la información cuando el usurio este logueado.
+            if (!Settings.IsLoggedProccesIn)
+            {
+                IsBusy = true;
+                oAddress = await App.oServiceManager.GetAddress();
+                CountrySelect = ContriesPiker.Find(x => x.id.Equals(oAddress.countries_id));
+                StateSelect = StatesPikers.Find(x => x.id.Equals(oAddress.states_id));
+                IsBusy = false;
+            }
+        }
+
         async private void RegisterAddress() {
             IsBusy = true;
             if (validate()) {
-                oAddress.users_id = Settings.IdUserLogin;
                 oAddress.states_id = StateSelect.id;
                 oAddress.countries_id = CountrySelect.id;
-                Address addresCurrent = await App.oServiceManager.SetAddress(oAddress);
+                UserLogin addresCurrent = await App.oServiceManager.SetAddress(oAddress);
 
-                if (addresCurrent.success)
+                IsBusy = false;
+                if (!Settings.IsLoggedProccesIn)
                 {
-                    App.Current.MainPage = new BillingPage();
+                    if (addresCurrent.success)
+                        await App.Current.MainPage.DisplayAlert("Notificación", "Sus datos fueron modificados correctamente.", "Ok");
+                    else
+                        await App.Current.MainPage.DisplayAlert("Notificación", "Por favor verifique los campos obligatorios.", "Ok");
                 }
-                else {
-                    IsBusy = false;
-                    if (string.IsNullOrEmpty(addresCurrent.message))
+                else
+                {
+                    if (addresCurrent.success)
                     {
-                        await App.Current.MainPage.DisplayAlert("Notificación", "Por favor ingrese a la plataforme y complete su registro.", "Ok");
+                        App.Current.MainPage = new BillingPage();
                     }
-                    else {
-                        await App.Current.MainPage.DisplayAlert("Notificación", addresCurrent.message, "Ok");
+                    else
+                    {
+                        IsBusy = false;
+                        if (addresCurrent.error != null)
+                        {
+                            foreach (JProperty property in addresCurrent.error.Properties())
+                            {
+                                switch (property.Name)
+                                {
+                                    case "street":
+                                        StreetError = "Ingrese la calle";
+                                        bStateError = true;
+                                        break;
+                                    case "exterior":
+                                        ExtError = "Ingrese no. exterior";
+                                        bExtError = true;
+                                        break;
+                                    case "cp":
+                                        CpError = "Ingrese CP";
+                                        bCpError = true;
+                                        break;
+                                    case "location":
+                                        LocationError = "Ingrese su localidad";
+                                        bLocationError = true;
+                                        break;
+                                    case "countries_id":
+                                        CountryError = "Ingrese su pais";
+                                        bCountryError = true;
+                                        break;
+                                    case "states_id":
+                                        StateError = "Ingrese su estado";
+                                        bStateError = true;
+                                        break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            await App.Current.MainPage.DisplayAlert("Notificación", "Por favor verifique los campos obligatorios", "Ok");
+                        }
                     }
                 }
             }
@@ -257,7 +316,31 @@ namespace DausterCustomer.ViewModels
 
         }
 
-        public void SearchLocation() {
+        async public void SearchLocation() {
+            IsBusy = true;
+            try
+            {
+                var request = new GeolocationRequest(GeolocationAccuracy.Medium);
+                var location = await Geolocation.GetLocationAsync(request);
+
+                if (location != null)
+                {
+                    Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
+                }
+            }
+            catch (FeatureNotSupportedException fnsEx)
+            {
+                // Handle not supported on device exception
+            }
+            catch (PermissionException pEx)
+            {
+                // Handle permission exception
+            }
+            catch (Exception ex)
+            {
+                // Unable to get location
+            }
+            IsBusy = false;
         }
 
     }

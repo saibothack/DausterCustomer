@@ -2,7 +2,10 @@
 using DausterCustomer.Models;
 using DausterCustomer.Views;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.GoogleMaps;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
@@ -14,20 +17,48 @@ namespace DausterCustomer
         public static List<KindPersons> KindPersonPiker { get; set; }
         public static List<Country> CountriesPiker { get; set; }
         public static List<State> StatesPiker { get; set; }
+        public static List<TypeCard> TypeCards { get; set; }
+        public static List<Vehicle> Vehicles { get; set; }
+        public static OtherCharges fullOtherCharges { get; set; }
+        public static PickUp dataPickUp { get; set; }
+        public static Delivery dataDelivery { get; set; }
+        public static List<Pin> dataPins { get; set; }
 
         public App()
         {
             InitializeComponent();
             oServiceManager = new Services.ServiceManager(new Services.RestService());
+            getCatalogs();
+            Settings.IsLoggedProccesIn = false;
 
             if (Settings.IsLoggedIn)
             {
-                MainPage = new NavigationPage(new LoginPage());
+                MainPage = new MasterDetailPage()
+                {
+                    Master = new MasterPage() { Title = "Main Page" },
+                    Detail = new NavigationPage(new HomePage())
+                };
             }
             else
             {
                 MainPage = new NavigationPage(new LoginPage());
             }
+        }
+
+        /// <summary>
+        /// Obtiene catalogos necesarios para el funcionamiento del app
+        /// </summary>
+        /// <returns></returns>
+        async Task getCatalogs() {
+            KindPersonPiker = await oServiceManager.GetKindPersons();
+            CountriesPiker = await oServiceManager.GetContry();
+            StatesPiker = await oServiceManager.GetStates();
+            TypeCards = await oServiceManager.GetTypeCardsAsync();
+            Vehicles = await oServiceManager.GetVehicleAsync();
+            fullOtherCharges = new OtherCharges();
+            dataPickUp = new PickUp();
+            dataDelivery = new Delivery();
+            dataPins = new List<Pin>();
         }
 
         protected override void OnStart()

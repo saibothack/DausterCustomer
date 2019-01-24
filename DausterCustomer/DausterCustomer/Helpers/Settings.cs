@@ -22,20 +22,24 @@ namespace DausterCustomer.Helpers
         #region Setting Constants
         private const string SettingsKey = "settings_key";
         private static readonly string SettingsDefault = string.Empty;
+
         private const string IsLoggedInTokenKey = "isloggedid_key";
         private static readonly bool IsLoggedInTokenDefault = false;
+
+        private const string IsLoggedProccesInTokenKey = "isloggedProccesid_key";
+        private static readonly bool IsLoggedProccesInTokenDefault = false;
 
         private const string idUserCurrentLogin = "idUserCurrentLogin";
         private static readonly int IdUserCurrentLoginToken = 0;
 
-        private const string NameUserCurrentLogin = "isloggedid_key";
+        private const string NameUserCurrentLogin = "isNameCurrentUser_key";
         private static readonly string NameUserCurrentLoginToken = string.Empty;
 
-        private const string AccessTokenCurrentUser = "isloggedid_key";
-        private static readonly string AccessTokenCurrentUserToken = string.Empty;
+        private const string imageProfiler = "imageProfiler_key";
+        private static readonly string imageProfilerToken = string.Empty;
 
-        private const string AccessTokenTypeCurrentUser = "isloggedid_key";
-        private static readonly string AccessTokenCurrentUserTokenType = string.Empty;
+        private const string AccessTokenCurrentUser = "isAccessToken_key";
+        private static readonly string AccessTokenCurrentUserToken = string.Empty;
         #endregion
 
 
@@ -57,6 +61,12 @@ namespace DausterCustomer.Helpers
             set { AppSettings.AddOrUpdateValue(IsLoggedInTokenKey, value); }
         }
 
+        public static bool IsLoggedProccesIn
+        {
+            get { return AppSettings.GetValueOrDefault(IsLoggedProccesInTokenKey, IsLoggedProccesInTokenDefault); }
+            set { AppSettings.AddOrUpdateValue(IsLoggedProccesInTokenKey, value); }
+        }
+
         public static int IdUserLogin
         {
             get { return AppSettings.GetValueOrDefault(idUserCurrentLogin, IdUserCurrentLoginToken); }
@@ -69,16 +79,16 @@ namespace DausterCustomer.Helpers
             set { AppSettings.AddOrUpdateValue(NameUserCurrentLogin, value); }
         }
 
+        public static string ImageProfiler
+        {
+            get { return AppSettings.GetValueOrDefault(imageProfiler, imageProfilerToken); }
+            set { AppSettings.AddOrUpdateValue(imageProfiler, value); }
+        }
+
         public static string AccessToken
         {
             get { return AppSettings.GetValueOrDefault(AccessTokenCurrentUser, AccessTokenCurrentUserToken); }
             set { AppSettings.AddOrUpdateValue(AccessTokenCurrentUser, value); }
-        }
-
-        public static string AccessTokenType
-        {
-            get { return AppSettings.GetValueOrDefault(AccessTokenTypeCurrentUser, AccessTokenCurrentUserTokenType); }
-            set { AppSettings.AddOrUpdateValue(AccessTokenTypeCurrentUser, value); }
         }
     }
 }

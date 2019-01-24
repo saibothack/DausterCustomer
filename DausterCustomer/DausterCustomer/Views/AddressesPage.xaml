@@ -31,18 +31,18 @@
                     <StackLayout Orientation="Horizontal">
                         <StackLayout Orientation="Vertical" Grid.Column="0" HorizontalOptions="FillAndExpand">
                             <Entry Text="{Binding oAddress.exterior, Mode=TwoWay}" TextColor="Gray" Placeholder="No. Exterior" PlaceholderColor="Gray" 
-                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                               Keyboard="Numeric" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
                                 <Label Text="{Binding ExtError, Mode=OneWay}" IsVisible="{Binding bExtError}" TextColor="Gold"/>
                         </StackLayout>
                         <StackLayout Orientation="Vertical" Grid.Column="1" HorizontalOptions="FillAndExpand">
                             <Entry Text="{Binding oAddress.interior, Mode=TwoWay}" TextColor="Gray" Placeholder="No. Interior" PlaceholderColor="Gray" 
-                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                               Keyboard="Numeric" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
                             <Label Text="{Binding ExtError, Mode=OneWay}" IsVisible="{Binding bExtError}" TextColor="Gold"/>
                         </StackLayout>
                     </StackLayout>
                     <StackLayout Orientation="Vertical">
                         <Entry Text="{Binding oAddress.cp, Mode=TwoWay}" TextColor="Gray" Placeholder="CP" PlaceholderColor="Gray" 
-                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                               Keyboard="Numeric" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
                         <Label Text="{Binding CpError, Mode=OneWay}" IsVisible="{Binding bCpError}" TextColor="Gold"/>
                     </StackLayout>
                     <StackLayout Orientation="Vertical">
@@ -51,20 +51,20 @@
                         <Label Text="{Binding LocationError, Mode=OneWay}" IsVisible="{Binding bLocationError}" TextColor="Gold"/>
                     </StackLayout>
                     <StackLayout Orientation="Vertical">
-                        <Picker BackgroundColor="White" ItemsSource="{Binding ContriesPiker}" ItemDisplayBinding="{Binding name}" 
-                                Title="Estado" SelectedItem="{ Binding CountrySelect, Mode=TwoWay}">
+                        <Picker BackgroundColor="White" ItemsSource="{Binding StatesPikers}" ItemDisplayBinding="{Binding name}" 
+                                Title="Estado" SelectedItem="{ Binding StateSelect, Mode=TwoWay}">
                         </Picker>
-                        <Label Text="{Binding ContryError, Mode=OneWay}" IsVisible="{Binding bContryError}" TextColor="Gold"/>
+                        <Label Text="{Binding ContryError, Mode=OneWay}" IsVisible="{Binding bStateError}" TextColor="Gold"/>
                     </StackLayout>
                     <StackLayout Orientation="Vertical">
-                        <Picker BackgroundColor="White" ItemsSource="{Binding StatesPikers}" ItemDisplayBinding="{Binding name}" 
-                                Title="Pais" SelectedItem="{ Binding StateSelect, Mode=TwoWay}">
+                        <Picker BackgroundColor="White" ItemsSource="{Binding ContriesPiker}" ItemDisplayBinding="{Binding name}" 
+                                Title="Pais" SelectedItem="{ Binding CountrySelect, Mode=TwoWay}">
                         </Picker>
-                        <Label Text="{Binding StateError, Mode=OneWay}" IsVisible="{Binding bStateError}" TextColor="Gold"/>
+                        <Label Text="{Binding StateError, Mode=OneWay}" IsVisible="{Binding bContryError}" TextColor="Gold"/>
                     </StackLayout>
                     <StackLayout>
                         <Button Text="Registrar" BackgroundColor="#0072BD" TextColor="White" 
-                                    FontSize="18" Command="{Binding RegisterCommand}"/>
+                                    FontSize="18" Command="{Binding RegisterAddressesCommand}"/>
                     </StackLayout>
                 </StackLayout>
                 <ActivityIndicator Color="#2E64FE" IsRunning="{Binding IsBusy }" Grid.Row="0"/>

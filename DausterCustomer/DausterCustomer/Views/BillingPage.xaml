@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="DausterCustomer.Views.BillingPage">
+             x:Class="DausterCustomer.Views.BillingPage"
+             Title="Registrar datos facturación">
     <ContentPage.Content>
         <ScrollView>
             <Grid>
@@ -13,18 +14,18 @@
 
                 <StackLayout Grid.Row="0" Orientation="Vertical" Margin="30">
                     <StackLayout Orientation="Vertical">
-                        <Entry Text="{Binding oAddress.cp, Mode=TwoWay}" TextColor="Gray" Placeholder="CP" PlaceholderColor="Gray" 
-                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
-                        <Label Text="{Binding CpError, Mode=OneWay}" IsVisible="{Binding bCpError}" TextColor="Gold"/>
+                        <Entry Text="{Binding oBilling.RFC, Mode=TwoWay}" TextColor="Gray" Placeholder="RFC" PlaceholderColor="Gray" 
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White" x:Name="entryRFC" />
+                        <Label Text="{Binding RFCError, Mode=OneWay}" IsVisible="{Binding bRFCError}" TextColor="Gold"/>
                     </StackLayout>
                     <StackLayout Orientation="Vertical">
-                        <Entry Text="{Binding oAddress.cp, Mode=TwoWay}" TextColor="Gray" Placeholder="CP" PlaceholderColor="Gray" 
+                        <Entry Text="{Binding oBilling.name, Mode=TwoWay}" TextColor="Gray" Placeholder="Razón Social" PlaceholderColor="Gray" 
                                Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
-                        <Label Text="{Binding CpError, Mode=OneWay}" IsVisible="{Binding bCpError}" TextColor="Gold"/>
+                        <Label Text="{Binding NameError, Mode=OneWay}" IsVisible="{Binding bNameError}" TextColor="Gold"/>
                     </StackLayout>
                     <StackLayout Orientation="Horizontal">
                         <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
-                            <Entry Text="{Binding oAddress.street, Mode=TwoWay}" TextColor="Gray" Placeholder="Calle" PlaceholderColor="Gray" 
+                            <Entry Text="{Binding oBilling.street, Mode=TwoWay}" TextColor="Gray" Placeholder="Calle" PlaceholderColor="Gray" 
                                    Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
                             <Label Text="{Binding StreetError, Mode=OneWay}" IsVisible="{Binding bStreetError}" TextColor="Gold"/>
                         </StackLayout>
@@ -39,31 +40,35 @@
                     </StackLayout>
                     <StackLayout Orientation="Horizontal">
                         <StackLayout Orientation="Vertical" Grid.Column="0" HorizontalOptions="FillAndExpand">
-                            <Entry Text="{Binding oAddress.exterior, Mode=TwoWay}" TextColor="Gray" Placeholder="No. Exterior" PlaceholderColor="Gray" 
-                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                            <Entry Text="{Binding oBilling.exterior, Mode=TwoWay}" TextColor="Gray" Placeholder="No. Exterior" PlaceholderColor="Gray" 
+                               Keyboard="Numeric" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
                             <Label Text="{Binding ExtError, Mode=OneWay}" IsVisible="{Binding bExtError}" TextColor="Gold"/>
                         </StackLayout>
                         <StackLayout Orientation="Vertical" Grid.Column="1" HorizontalOptions="FillAndExpand">
-                            <Entry Text="{Binding oAddress.interior, Mode=TwoWay}" TextColor="Gray" Placeholder="No. Interior" PlaceholderColor="Gray" 
-                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                            <Entry Text="{Binding oBilling.interior, Mode=TwoWay}" TextColor="Gray" Placeholder="No. Interior" PlaceholderColor="Gray" 
+                               Keyboard="Numeric" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
                             <Label Text="{Binding ExtError, Mode=OneWay}" IsVisible="{Binding bExtError}" TextColor="Gold"/>
                         </StackLayout>
                     </StackLayout>
                     <StackLayout Orientation="Vertical">
-                        <Entry Text="{Binding oAddress.cp, Mode=TwoWay}" TextColor="Gray" Placeholder="CP" PlaceholderColor="Gray" 
-                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                        <Entry Text="{Binding oBilling.cp, Mode=TwoWay}" TextColor="Gray" Placeholder="CP" PlaceholderColor="Gray" 
+                               Keyboard="Numeric" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
                         <Label Text="{Binding CpError, Mode=OneWay}" IsVisible="{Binding bCpError}" TextColor="Gold"/>
                     </StackLayout>
                     <StackLayout Orientation="Vertical">
-                        <Entry Text="{Binding oAddress.location, Mode=TwoWay}" TextColor="Gray" Placeholder="Localidad" PlaceholderColor="Gray" 
+                        <Entry Text="{Binding oBilling.colony, Mode=TwoWay}" TextColor="Gray" Placeholder="Colonia" PlaceholderColor="Gray" 
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                        <Label Text="{Binding ColonyError, Mode=OneWay}" IsVisible="{Binding bColonyError}" TextColor="Gold"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <Entry Text="{Binding oBilling.location, Mode=TwoWay}" TextColor="Gray" Placeholder="Localidad" PlaceholderColor="Gray" 
                                Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
                         <Label Text="{Binding LocationError, Mode=OneWay}" IsVisible="{Binding bLocationError}" TextColor="Gold"/>
                     </StackLayout>
                     <StackLayout Orientation="Vertical">
-                        <Picker BackgroundColor="White" ItemsSource="{Binding ContriesPiker}" ItemDisplayBinding="{Binding name}" 
-                                Title="Estado" SelectedItem="{ Binding CountrySelect, Mode=TwoWay}">
-                        </Picker>
-                        <Label Text="{Binding ContryError, Mode=OneWay}" IsVisible="{Binding bContryError}" TextColor="Gold"/>
+                        <Entry Text="{Binding oBilling.city, Mode=TwoWay}" TextColor="Gray" Placeholder="Ciudad" PlaceholderColor="Gray" 
+                               Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                        <Label Text="{Binding CityError, Mode=OneWay}" IsVisible="{Binding bCityError}" TextColor="Gold"/>
                     </StackLayout>
                     <StackLayout Orientation="Vertical">
                         <Picker BackgroundColor="White" ItemsSource="{Binding StatesPikers}" ItemDisplayBinding="{Binding name}" 
@@ -71,14 +76,22 @@
                         </Picker>
                         <Label Text="{Binding StateError, Mode=OneWay}" IsVisible="{Binding bStateError}" TextColor="Gold"/>
                     </StackLayout>
-                    <StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <Picker BackgroundColor="White" ItemsSource="{Binding ContriesPiker}" ItemDisplayBinding="{Binding name}" 
+                                Title="Estado" SelectedItem="{ Binding CountrySelect, Mode=TwoWay}">
+                        </Picker>
+                        <Label Text="{Binding CountryError, Mode=OneWay}" IsVisible="{Binding bCountryError}" TextColor="Gold"/>
+                    </StackLayout>
+
+
+                    <StackLayout Orientation="Horizontal">
                         <StackLayout HorizontalOptions="FillAndExpand">
                             <Button Text="Omitir" BackgroundColor="#0072BD" TextColor="White" 
                                     FontSize="18" Command="{Binding OmitirCommand}"/>
                         </StackLayout>
                         <StackLayout HorizontalOptions="FillAndExpand">
                             <Button Text="Registrar" BackgroundColor="#0072BD" TextColor="White" 
-                                    FontSize="18" Command="{Binding RegisterCommand}"/>
+                                    FontSize="18" Command="{Binding RegisterBillingCommand}"/>
                         </StackLayout>
                     </StackLayout>
                 </StackLayout>

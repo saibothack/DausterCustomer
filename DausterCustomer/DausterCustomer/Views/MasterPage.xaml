@@ -5,22 +5,30 @@
              xmlns:local="clr-namespace:DausterCustomer.Views"
              xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin">
     <ContentPage.Content>
-        <Grid BackgroundColor="Transparent">
+        <Grid BackgroundColor="#2E2E2E">
             <Grid.RowDefinitions>
                 <RowDefinition Height="200" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid>
-                <Image Source="bg.png" Aspect="AspectFill" />
+                <Image Source="{Binding imageSorceBackgrond}" Aspect="AspectFill" />
                 <StackLayout Padding="0,20,0,0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                    <controls:CircleImage BorderColor="White" BorderThickness="2" Source="profile.png" Aspect="AspectFill" WidthRequest="85" HeightRequest="85" />
-                    <Label Text="Adam Pedley" TextColor="White" FontSize="Large" />
+                    <controls:CircleImage BorderColor="White" BorderThickness="2" Source="{Binding imageSorceProfiler}" Aspect="AspectFill" WidthRequest="85" HeightRequest="85" />
+                    <Label Text="{Binding nameCurrentUser, Mode=TwoWay}" TextColor="White" FontSize="Large" />
                 </StackLayout>
             </Grid>
             <StackLayout Margin="20,20,20,0" Grid.Row="1" Spacing="15">
-                <local:NavigationItem Text="Page One" Icon="fa-archive" Command="{Binding NavigationCommand}" CommandParameter="1" />
+                <local:NavigationItem Text="Ordenar Servicio" Icon="fas fa-map-marker-alt" Command="{Binding NavigationCommand}" CommandParameter="1"/>
+                <local:NavigationItem Text="Mis Pagos" Icon="fas fa-map-marker-alt" Command="{Binding NavigationCommand}" CommandParameter="2" />
+                <local:NavigationItem Text="Mis viajes" Icon="fas fa-map-marker-alt" Command="{Binding NavigationCommand}" CommandParameter="3" />
                 <ContentView HeightRequest="1" BackgroundColor="Gray" />
-                <local:NavigationItem Text="Page Two" Icon="fa-cog" Command="{Binding NavigationCommand}" CommandParameter="2" />
+                <local:NavigationItem Text="Mi perfil" Icon="fas fa-map-marker-alt" Command="{Binding NavigationCommand}" CommandParameter="4" />
+                <local:NavigationItem Text="Mi dirección" Icon="fas fa-map-marker-alt" Command="{Binding NavigationCommand}" CommandParameter="5" />
+                <local:NavigationItem Text="Datos Facturación" Icon="fas fa-map-marker-alt" Command="{Binding NavigationCommand}" CommandParameter="6" />
+                <local:NavigationItem Text="Métodos de pago" Icon="fas fa-map-marker-alt" Command="{Binding NavigationCommand}" CommandParameter="7" />
+                <ContentView HeightRequest="1" BackgroundColor="Gray" />
+                <local:NavigationItem Text="Ayuda" Icon="fas fa-map-marker-alt" Command="{Binding NavigationCommand}" CommandParameter="8" />
+                <local:NavigationItem Text="Cerrar sesión" Icon="fas fa-map-marker-alt" Command="{Binding NavigationCommand}" CommandParameter="9" />
             </StackLayout>
         </Grid>
     </ContentPage.Content>

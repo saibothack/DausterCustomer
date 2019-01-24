@@ -23,6 +23,7 @@ namespace DausterCustomer.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            Xamarin.FormsGoogleMaps.Init("AIzaSyDNSjUu5ZcMxNVYAICYDbdYUQDfKos0KZE");
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

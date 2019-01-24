@@ -20,6 +20,12 @@
         <string>UIInterfaceOrientationLandscapeLeft</string>
         <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
+	
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Estás a punto de utilizar la ubicación!</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Se llamará si se usa la ubicación detrás de las escenas.</string>
+	
     <key>MinimumOSVersion</key>
     <string>8.0</string>
     <key>CFBundleDisplayName</key>

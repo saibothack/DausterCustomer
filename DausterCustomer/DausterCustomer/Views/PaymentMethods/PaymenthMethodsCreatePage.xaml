@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:fastEntry="clr-namespace:XamarinFastEntrySample.FastEntry;assembly=XamarinFastEntry.Behaviors"
+             xmlns:local="clr-namespace:DausterCustomer.Utils"
+             x:Class="DausterCustomer.Views.PaymentMethods.PaymenthMethodsCreatePage"
+             NavigationPage.HasNavigationBar="False">
+    <Page.Resources>
+        <ResourceDictionary>
+            <local:CardNumberToImageConverter x:Key="CardConverter" 
+                Amex="ic_card.png" Dinners="ic_card.png" Discover="ic_card.png" 
+                JCB="ic_card.png" MasterCard="ic_mastercard.png" Visa="ic_visa.png" 
+                NotRecognized="ic_card.png"/>
+        </ResourceDictionary>
+    </Page.Resources>
+    <ContentPage.Content>
+        <ScrollView>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackLayout Orientation="Vertical" Grid.Row="0">
+                    <StackLayout BackgroundColor="Black">
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout HorizontalOptions="StartAndExpand">
+                                <Image Source="{Binding imageSorceBack}" Margin="20">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding BackCommand}"></TapGestureRecognizer>
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout>
+                            <Label Text="Agregar método de pago" TextColor="White" HorizontalOptions="Center" FontSize="Medium"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout HorizontalOptions="EndAndExpand">
+                                <Image Source="{Binding imageSorceAdd}" Margin="20">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding AddCommand}"></TapGestureRecognizer>
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" Margin="20">
+                        <StackLayout>
+                            <Entry Text="{Binding oPaymentMethods.name, Mode=TwoWay}" TextColor="Gray" Placeholder="Nombre" PlaceholderColor="Gray" 
+                                   Keyboard="Text" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                            <Label Text="{Binding ErrorName, Mode=OneWay}" IsVisible="{Binding bErrorName}" TextColor="Red"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout HorizontalOptions="FillAndExpand">
+                                <Entry Text="{Binding oPaymentMethods.card, Mode=TwoWay}" TextColor="Gray" Placeholder="Número de tarjeta" PlaceholderColor="Gray" 
+                                   Keyboard="Numeric" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White">
+                                    <Entry.Behaviors>
+                                        <fastEntry:XamarinFastEntryBehaviour Mask="#### #### #### ####" MaxLength="19"/>
+                                    </Entry.Behaviors>
+                                </Entry>
+                                <Label Text="{Binding ErrorCard, Mode=OneWay}" IsVisible="{Binding bErrorCard}" TextColor="Red"/>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="End">
+                                <Image Source="{Binding oPaymentMethods.card, Converter={StaticResource CardConverter}}" WidthRequest="32"/>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout HorizontalOptions="FillAndExpand">
+                                <Entry Text="{Binding oPaymentMethods.month, Mode=TwoWay}" TextColor="Gray" Placeholder="MM" PlaceholderColor="Gray" 
+                                   Keyboard="Numeric" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                                <Label Text="{Binding ErrorMonth, Mode=OneWay}" IsVisible="{Binding bErrorMonth}" TextColor="Red"/>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="FillAndExpand">
+                                <Entry Text="{Binding oPaymentMethods.year, Mode=TwoWay}" TextColor="Gray" Placeholder="YY" PlaceholderColor="Gray" 
+                                   Keyboard="Numeric" FontSize="18" HorizontalTextAlignment="Start" BackgroundColor="White"/>
+                                <Label Text="{Binding ErrorYear, Mode=OneWay}" IsVisible="{Binding bErrorYear}" TextColor="Red"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+                <ActivityIndicator Color="#2E64FE" IsRunning="{Binding IsBusy }" HeightRequest="200" Grid.Row="0"/>
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
