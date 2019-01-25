@@ -79,7 +79,7 @@
                         </StackLayout>
                     </StackLayout>
                     <StackLayout>
-                        <Button Text="Continuar" BackgroundColor="#01b2ff" TextColor="White" HeightRequest="40"/>
+                        <Button Text="Continuar" BackgroundColor="#01b2ff" TextColor="White" HeightRequest="40" Command="ContinueCommand"/>
                     </StackLayout>
                 </StackLayout>
             </StackLayout>

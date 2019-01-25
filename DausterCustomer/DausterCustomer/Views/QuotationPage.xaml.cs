@@ -15,10 +15,10 @@ namespace DausterCustomer.Views
 	{
         private QuotationPageViewModel viewModel;
 
-        public QuotationPage (int iDistance, int iDuration)
+        public QuotationPage ()
 		{
 			InitializeComponent ();
-            BindingContext = viewModel = new QuotationPageViewModel(iDistance, iDuration);
+            BindingContext = viewModel = new QuotationPageViewModel();
             viewModel.Navigation = this.Navigation;
         }
 

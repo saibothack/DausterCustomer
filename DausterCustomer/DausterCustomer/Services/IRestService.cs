@@ -37,5 +37,7 @@ namespace DausterCustomer.Services
 
         Task deletePaymentMethod(int id);
 
+        Task<int> setServiceAsync(Service service);
+
     }
 }   

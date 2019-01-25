@@ -110,5 +110,10 @@ namespace DausterCustomer.Services
         {
             return restService.deletePaymentMethod(paymentMethods.id);
         }
+
+        public Task<int> setServiceAsync(Service service)
+        {
+            return restService.setServiceAsync(service);
+        }
     }
 }

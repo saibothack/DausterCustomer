@@ -85,7 +85,7 @@ namespace DausterCustomer.ViewModels
 
         private async void NextCommand() {
             if (validate()) {
-                App.dataPickUp = oPickUp;
+                App.setService.pickUp = oPickUp;
                 DeliveryPage delivery = new DeliveryPage();
                 await this.Navigation.PushAsync(delivery);
             }

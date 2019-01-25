@@ -51,9 +51,6 @@ namespace DausterCustomer.Views
         public HomePage ()
 		{
 			InitializeComponent();
-            App.dataPins = new List<Pin>();
-            App.dataPickUp = new PickUp();
-            App.dataDelivery = new Delivery();
             map.MapStyle = MapStyle.FromJson(jsonStyle);
             map.UiSettings.ZoomControlsEnabled = false;
             googleSearChBar.BackgroundColor = Color.White;
@@ -90,7 +87,7 @@ namespace DausterCustomer.Views
 
                 map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude), Distance.FromMeters(150)), true);
             }
-            else if (status != PermissionStatus.Unknown)
+            else if (status == PermissionStatus.Unknown)
             {
                 await DisplayAlert("Ubicación", "Se denego la ubucación, no es posible continuar.", "Aceptar");
             }
@@ -199,14 +196,25 @@ namespace DausterCustomer.Views
                 await DisplayAlert("Ubicación", "Por favor seleccione por lo menos dos ubicaciones a cotizar.", "Aceptar");
             }
             else {
-                App.dataPins = lsPins;
+                List<Coordinates> coordinates = new List<Coordinates>();
+                for (int i = 0; i < (lsPins.Count - 1); i++)
+                {
+                    Coordinates coordinate = new Coordinates();
+                    coordinate.latitude = lsPins[i].Position.Latitude;
+                    coordinate.longitude = lsPins[i].Position.Longitude;
+                    coordinates.Add(coordinate);
+                }
+
                 acIndicator.IsVisible = true;
                 acIndicator.IsRunning = true;
                 JObject routes = await App.oServiceManager.getAsyncRouteGoogle(lsPins);
                 int iDistance = (int)routes["routes"][0]["legs"][0]["distance"]["value"];
                 int iDuration = (int)routes["routes"][0]["legs"][0]["duration"]["value"];
+                App.setService.coordinates = coordinates;
+                App.setService.meters = iDistance;
+                App.setService.time = iDuration;
 
-                QuotationPage quotationPage = new QuotationPage(iDistance, iDuration);
+                QuotationPage quotationPage = new QuotationPage();
                 acIndicator.IsVisible = false;
                 acIndicator.IsRunning = false;
                 await this.Navigation.PushAsync(quotationPage);

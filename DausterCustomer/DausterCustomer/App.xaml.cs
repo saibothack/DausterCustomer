@@ -19,10 +19,7 @@ namespace DausterCustomer
         public static List<State> StatesPiker { get; set; }
         public static List<TypeCard> TypeCards { get; set; }
         public static List<Vehicle> Vehicles { get; set; }
-        public static OtherCharges fullOtherCharges { get; set; }
-        public static PickUp dataPickUp { get; set; }
-        public static Delivery dataDelivery { get; set; }
-        public static List<Pin> dataPins { get; set; }
+        public static Service setService { get; set; }
 
         public App()
         {
@@ -55,10 +52,7 @@ namespace DausterCustomer
             StatesPiker = await oServiceManager.GetStates();
             TypeCards = await oServiceManager.GetTypeCardsAsync();
             Vehicles = await oServiceManager.GetVehicleAsync();
-            fullOtherCharges = new OtherCharges();
-            dataPickUp = new PickUp();
-            dataDelivery = new Delivery();
-            dataPins = new List<Pin>();
+            setService = new Service();
         }
 
         protected override void OnStart()

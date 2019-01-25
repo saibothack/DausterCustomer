@@ -81,7 +81,7 @@ namespace DausterCustomer.ViewModels
 
         public void saveCharge() {
             if (validation()) {
-                App.fullOtherCharges = oOtherCharges;
+                App.setService.lsOtherCharges.Add(oOtherCharges);
                 Navigation.PopAsync();
             }
         }

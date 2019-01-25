@@ -22,6 +22,7 @@ namespace DausterCustomer.ViewModels
         public ICommand BackCommand { get; set; }
         public ICommand AddCommand { get; set; }
         public ICommand DeleteItemCommand { get; set; }
+        public ICommand ContinueCommand { get; set; }
         public Task Initialization { get; private set; }
         #endregion
 
@@ -93,8 +94,8 @@ namespace DausterCustomer.ViewModels
 
         #endregion
 
-        public QuotationPageViewModel(int iDistance, int iDuration) {
-
+        public QuotationPageViewModel() {
+            App.setService.lsOtherCharges = new List<OtherCharges>();
             lsVehicles = App.Vehicles;
             itemSelectVehicle = lsVehicles[0];
             fCharges = "$0.00";
@@ -103,8 +104,8 @@ namespace DausterCustomer.ViewModels
             imgSourceAdd = ImageSource.FromResource("DausterCustomer.Images.ic_add.png");
 
 
-            intDistance = iDistance;
-            intDuration = iDuration;
+            intDistance = App.setService.meters;
+            intDuration = App.setService.time;
 
             TimeSpan result = TimeSpan.FromHours(intDuration / 60);
             sTime = result.ToString("hh':'mm") + " min";
@@ -115,8 +116,14 @@ namespace DausterCustomer.ViewModels
 
             BackCommand = new Command(pageBack);
             AddCommand = new Command(addOtherCharges);
+            ContinueCommand = new Command(CommandContinue);
             DeleteItemCommand = new Command<ViewCell>(deleteItem);
 
+        }
+
+        private async void CommandContinue() {
+            PickUpPage page = new PickUpPage();
+            await Navigation.PushAsync(page);
         }
 
         private async Task InitializeAsync()
@@ -136,7 +143,7 @@ namespace DausterCustomer.ViewModels
         private void deleteItem(ViewCell viewCell) {
             viewCell.ContextActions.Clear();
             lsOtherCharge.Remove((OtherCharges)viewCell.BindingContext);
-
+            App.setService.lsOtherCharges.Remove((OtherCharges)viewCell.BindingContext);
             calculateCost();
         }
 
@@ -158,15 +165,21 @@ namespace DausterCustomer.ViewModels
             dValuesCoordinates["vehicles_id"] = iVehicle;
 
             fCost = await App.oServiceManager.GetQuotation(dValuesCoordinates);
+            App.setService.cost = fCost;
+            App.setService.vehicle_id = iVehicle;
 
             fCharges = fCost.ToString("c2");
         }
 
         public void callPopOption() {
-            if (!string.IsNullOrEmpty(App.fullOtherCharges.cost))
+            lsOtherCharge = new ObservableCollection<OtherCharges>();
+
+            if (App.setService.lsOtherCharges.Count > 0)
             {
-                lsOtherCharge.Add(App.fullOtherCharges);
-                App.fullOtherCharges = new OtherCharges();
+                int i = 0;
+                foreach (OtherCharges item in App.setService.lsOtherCharges) {
+                    lsOtherCharge.Add(App.setService.lsOtherCharges[i]);
+                }
             }
 
             calculateCost();

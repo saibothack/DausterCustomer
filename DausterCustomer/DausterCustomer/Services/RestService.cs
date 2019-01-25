@@ -508,5 +508,32 @@ namespace DausterCustomer.Services
                 Debug.WriteLine(@"ERROR {0}", ex.Message);
             }
         }
+
+        public async Task<int> setServiceAsync(Service service)
+        {
+            var uri = new Uri(string.Format(Constants.RestUrl + "services/create"));
+            int idService = 0;
+
+            try
+            {
+                HttpResponseMessage response = null;
+                client.DefaultRequestHeaders
+                    .Authorization = new AuthenticationHeaderValue("Bearer", Settings.AccessToken);
+                client.DefaultRequestHeaders
+                  .Accept
+                  .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                response = await client.GetAsync(uri);
+
+                var request = await response.Content.ReadAsStringAsync();
+                idService = JsonConvert.DeserializeObject<int>(request);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"ERROR {0}", ex.Message);
+            }
+
+            return idService;
+        }
+
     }
 }

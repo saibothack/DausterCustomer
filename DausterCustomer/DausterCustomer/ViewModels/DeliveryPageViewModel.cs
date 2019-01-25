@@ -1,5 +1,6 @@
 ﻿using DausterCustomer.Models;
 using DausterCustomer.Utils;
+using DausterCustomer.Views;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -82,9 +83,15 @@ namespace DausterCustomer.ViewModels
             CommandNext = new Command(NextCommand);
         }
 
-        private void NextCommand() {
+        private async void NextCommand() {
             if (validate()) {
-                App.dataDelivery = oDelivery;
+                App.setService.delivery = oDelivery;
+
+                App.setService.id = await App.oServiceManager.setServiceAsync(App.setService);
+
+                var mdp = (Application.Current.MainPage as MasterDetailPage);
+                var navPage = mdp.Detail as NavigationPage;
+                await navPage.PushAsync(new SearchDriverPage());
             }
         }
 
